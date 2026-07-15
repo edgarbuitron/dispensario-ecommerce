@@ -83,7 +83,11 @@ class CartService
             return ['success' => false, 'message' => 'Cupón inválido o expirado'];
         }
 
-        if (!$coupon->canBeUsed($cart->subtotal)) {
+        $timesUsedByCustomer = Auth::check()
+            ? \App\Models\Order::where('user_id', Auth::id())->where('coupon_code', $code)->count()
+            : 0;
+
+        if (!$coupon->canBeUsed($cart->subtotal, $timesUsedByCustomer)) {
             return ['success' => false, 'message' => 'No cumples los requisitos para este cupón'];
         }
 

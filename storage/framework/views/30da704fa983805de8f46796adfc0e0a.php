@@ -128,16 +128,25 @@
 
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;">
             <a href="<?php echo e(route('home')); ?>" class="navbar-brand">🌿 Dispensario</a>
-            
+
+            <form method="GET" action="<?php echo e(route('catalog.index')); ?>" style="position: relative; flex: 1; max-width: 340px;">
+                <input type="text" id="navSearchInput" name="search" autocomplete="off" placeholder="Buscar productos..."
+                       value="<?php echo e(request('search')); ?>"
+                       style="width: 100%; padding: 0.6rem 1rem; border-radius: 20px; border: none;">
+                <div id="navSearchResults"
+                     style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: #fff; color: #333; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); overflow: hidden; z-index: 50;"></div>
+            </form>
+
             <div style="display: flex; gap: 2rem;">
                 <a href="<?php echo e(route('home')); ?>">Inicio</a>
                 <a href="<?php echo e(route('catalog.index')); ?>">Catálogo</a>
-                <a href="<?php echo e(route('faq')); ?>">Preguntas</a>
+                <!--<a href="<?php echo e(route('faq')); ?>">Preguntas</a>-->
                 <a href="<?php echo e(route('contact')); ?>">Contacto</a>
                 
                 <?php if(auth()->guard()->check()): ?>
+                    <a href="<?php echo e(route('wishlist.index')); ?>">❤️ Favoritos</a>
                     <a href="<?php echo e(route('profile.index')); ?>">Perfil</a>
                     <a href="<?php echo e(route('orders.index')); ?>">Órdenes</a>
                     <form method="POST" action="<?php echo e(route('logout')); ?>" style="display:inline;">
@@ -147,7 +156,13 @@
                 <?php else: ?>
                     <a href="<?php echo e(route('login')); ?>">Iniciar Sesión</a>
                 <?php endif; ?>
-                
+
+                <?php if(auth()->guard('admin')->check()): ?>
+                    <a href="<?php echo e(route('admin.dashboard')); ?>">Admin</a>
+                <?php else: ?>
+                    <a href="<?php echo e(route('admin.login')); ?>">Admin</a>
+                <?php endif; ?>
+
                 <a href="<?php echo e(route('cart.index')); ?>">🛒 <span id="cart-count">0</span></a>
             </div>
         </div>
@@ -289,7 +304,55 @@
         }
         
         updateCartCount();
-        
+
+        // Búsqueda rápida en el navbar
+        (function () {
+            const input = document.getElementById('navSearchInput');
+            const results = document.getElementById('navSearchResults');
+            let debounce;
+
+            if (!input || !results) return;
+
+            input.addEventListener('input', function () {
+                clearTimeout(debounce);
+                const q = input.value.trim();
+
+                if (q.length < 2) {
+                    results.style.display = 'none';
+                    return;
+                }
+
+                debounce = setTimeout(function () {
+                    fetch('<?php echo e(route("search")); ?>?q=' + encodeURIComponent(q))
+                        .then((r) => r.json())
+                        .then((data) => {
+                            if (!data.results || data.results.length === 0) {
+                                results.innerHTML = '<div style="padding: 1rem; color: #666;">Sin resultados</div>';
+                                results.style.display = 'block';
+                                return;
+                            }
+
+                            const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+                            results.innerHTML = data.results.map(function (p) {
+                                return '<a href="/product/' + encodeURIComponent(p.slug) + '" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; text-decoration: none; color: #333; border-bottom: 1px solid #eee;">' +
+                                    (p.image ? '<img src="' + esc(p.image) + '" style="width: 36px; height: 36px; object-fit: cover; border-radius: 4px;">' : '<span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;">📦</span>') +
+                                    '<span style="flex:1;">' + esc(p.name) + '</span>' +
+                                    '<strong>' + esc(p.price) + '</strong>' +
+                                    '</a>';
+                            }).join('') + '<a href="<?php echo e(route("catalog.index")); ?>?search=' + encodeURIComponent(q) + '" style="display:block; text-align:center; padding:0.75rem; font-weight:600; text-decoration:none; color:#000; background:#f8f9fa;">Ver todos los resultados</a>';
+                            results.style.display = 'block';
+                        });
+                }, 250);
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!input.contains(e.target) && !results.contains(e.target)) {
+                    results.style.display = 'none';
+                }
+            });
+        })();
+
         // Dark mode
         if (localStorage.getItem('theme') === 'dark') {
             document.body.style.background = '#1a1a1a';

@@ -132,8 +132,8 @@ class OrderController extends Controller
             'order_id' => $order->id,
             'carrier' => $validated['carrier'],
             'tracking_number' => $validated['tracking_number'],
-            'tracking_url' => $validated['tracking_url'],
-            'notes' => $validated['notes'],
+            'tracking_url' => $validated['tracking_url'] ?? null,
+            'notes' => $validated['notes'] ?? null,
             'shipped_date' => now(),
         ]);
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 use Illuminate\Support\Facades\Route;
 
@@ -61,6 +61,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/order/{order}/upload-proof', [\App\Http\Controllers\ProofController::class, 'clientUploadForm'])->name('order.upload-proof.form');
     Route::post('/order/{order}/upload-proof', [\App\Http\Controllers\ProofController::class, 'clientUploadProof'])->name('order.upload-proof');
 
+    // Favoritos
+    Route::get('/wishlist', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/{product}/toggle', [\App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
+    // Reseñas
+    Route::post('/product/{product}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+
     // Perfil
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
@@ -93,7 +100,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Productos
         Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)
-            ->only(['index', 'create', 'edit', 'update']);
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
         Route::post('products/{productImage}/delete-image', [\App\Http\Controllers\Admin\ProductController::class, 'deleteImage'])->name('products.deleteImage');
 
         // CategorÃ­as
@@ -104,13 +111,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('brands', \App\Http\Controllers\Admin\BrandController::class)
             ->except(['show']);
 
-        // Ã“rdenes
+        // Órdenes
+        Route::get('orders/export', [\App\Http\Controllers\Admin\OrderController::class, 'export'])->name('orders.export');
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class, ['only' => ['index', 'show']]);
         Route::post('orders/{order}/approve-proof', [\App\Http\Controllers\Admin\OrderController::class, 'approveProof'])->name('orders.approveProof');
         Route::post('orders/{order}/reject-proof', [\App\Http\Controllers\Admin\OrderController::class, 'rejectProof'])->name('orders.rejectProof');
         Route::post('orders/{order}/update-status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
         Route::post('orders/{order}/add-shipment', [\App\Http\Controllers\Admin\OrderController::class, 'addShipment'])->name('orders.addShipment');
-        Route::get('orders/export', [\App\Http\Controllers\Admin\OrderController::class, 'export'])->name('orders.export');
         
         // Comprobantes de transferencia
         Route::get('proofs', [\App\Http\Controllers\ProofController::class, 'adminIndex'])->name('proofs.index');

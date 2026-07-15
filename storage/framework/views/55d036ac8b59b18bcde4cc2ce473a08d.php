@@ -50,18 +50,43 @@
                 <!-- Precio -->
                 <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Precio Mínimo</label>
-                    <input type="number" name="min_price" value="<?php echo e($filters['min_price'] ?? ''); ?>" 
+                    <input type="number" name="min_price" value="<?php echo e($filters['min_price'] ?? ''); ?>"
                            placeholder="$0"
                            style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
                 </div>
-                
+
                 <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Precio Máximo</label>
-                    <input type="number" name="max_price" value="<?php echo e($filters['max_price'] ?? ''); ?>" 
+                    <input type="number" name="max_price" value="<?php echo e($filters['max_price'] ?? ''); ?>"
                            placeholder="$5000"
                            style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
                 </div>
-                
+
+                <!-- Ordenar por -->
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Ordenar por</label>
+                    <select name="sort" onchange="this.form.submit()"
+                            style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="newest" <?php echo e($filters['sort'] === 'newest' ? 'selected' : ''); ?>>Más nuevo</option>
+                        <option value="oldest" <?php echo e($filters['sort'] === 'oldest' ? 'selected' : ''); ?>>Más viejo</option>
+                        <option value="rating" <?php echo e($filters['sort'] === 'rating' ? 'selected' : ''); ?>>Mejor calificados (estrellas)</option>
+                        <option value="price-asc" <?php echo e($filters['sort'] === 'price-asc' ? 'selected' : ''); ?>>Precio: menor a mayor</option>
+                        <option value="price-desc" <?php echo e($filters['sort'] === 'price-desc' ? 'selected' : ''); ?>>Precio: mayor a menor</option>
+                        <option value="name-asc" <?php echo e($filters['sort'] === 'name-asc' ? 'selected' : ''); ?>>Nombre: A a la Z</option>
+                        <option value="name-desc" <?php echo e($filters['sort'] === 'name-desc' ? 'selected' : ''); ?>>Nombre: Z a la A</option>
+                    </select>
+                </div>
+
+                <!-- Descuento -->
+                <div>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; cursor: pointer;">
+                        <input type="checkbox" name="on_sale" value="1" <?php echo e(!empty($filters['on_sale']) ? 'checked' : ''); ?>
+
+                               onchange="this.form.submit()">
+                        Solo con descuento
+                    </label>
+                </div>
+
                 <!-- Botones -->
                 <div style="display: flex; gap: 1rem;">
                     <button type="submit" class="btn btn-primary" style="flex: 1;">Filtrar</button>
@@ -70,28 +95,15 @@
             </form>
         </div>
     </aside>
-    
+
     <!-- Contenido Principal -->
     <main>
         <!-- Header del Catálogo -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <div>
-                <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Catálogo de Productos</h1>
-                <p style="color: #666;"><?php echo e($products->total()); ?> productos encontrados</p>
-            </div>
-            
-            <div>
-                <label style="font-weight: 600; margin-right: 0.5rem;">Ordenar por:</label>
-                <select name="sort" onchange="location.href='<?php echo e(route('catalog.index')); ?>?sort=' + this.value" 
-                        style="padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
-                    <option value="newest" <?php echo e($filters['sort'] === 'newest' ? 'selected' : ''); ?>>Más recientes</option>
-                    <option value="price-asc" <?php echo e($filters['sort'] === 'price-asc' ? 'selected' : ''); ?>>Precio: menor a mayor</option>
-                    <option value="price-desc" <?php echo e($filters['sort'] === 'price-desc' ? 'selected' : ''); ?>>Precio: mayor a menor</option>
-                    <option value="name" <?php echo e($filters['sort'] === 'name' ? 'selected' : ''); ?>>Nombre (A-Z)</option>
-                </select>
-            </div>
+        <div style="margin-bottom: 2rem;">
+            <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Catálogo de Productos</h1>
+            <p style="color: #666;"><?php echo e($products->total()); ?> productos encontrados</p>
         </div>
-        
+
         <!-- Grid de Productos -->
         <?php if($products->count() > 0): ?>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
@@ -111,8 +123,25 @@
                                     AGOTADO
                                 </div>
                             <?php endif; ?>
+
+                            <?php if($product->hasDiscount()): ?>
+                                <span style="position: absolute; top: 10px; left: 10px; background: #dc3545; color: #fff; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
+                                    -<?php echo e(rtrim(rtrim(number_format($product->discount_percentage, 1), '0'), '.')); ?>%
+                                </span>
+                            <?php endif; ?>
+
+                            <?php if(auth()->guard()->check()): ?>
+                                <form method="POST" action="<?php echo e(route('wishlist.toggle', $product)); ?>" style="position: absolute; top: 10px; right: 10px;">
+                                    <?php echo csrf_field(); ?>
+                                    <button type="submit" title="<?php echo e(in_array($product->id, $wishlistedIds ?? []) ? 'Quitar de favoritos' : 'Agregar a favoritos'); ?>"
+                                            style="width: 34px; height: 34px; border-radius: 50%; border: none; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 1rem; cursor: pointer; opacity: <?php echo e(in_array($product->id, $wishlistedIds ?? []) ? '1' : '0.6'); ?>;">
+                                        <?php echo e(in_array($product->id, $wishlistedIds ?? []) ? '❤️' : '🤍'); ?>
+
+                                    </button>
+                                </form>
+                            <?php endif; ?>
                         </div>
-                        
+
                         <div style="padding: 1.5rem;">
                             <h3 style="font-weight: 600; margin-bottom: 0.5rem;">
                                 <a href="<?php echo e(route('product.show', $product->slug)); ?>" style="color: inherit; text-decoration: none;">
@@ -120,20 +149,39 @@
 
                                 </a>
                             </h3>
-                            
+
                             <?php if($product->brand): ?>
                                 <p style="color: #999; font-size: 0.85rem; margin-bottom: 0.5rem;"><?php echo e($product->brand->name); ?></p>
                             <?php endif; ?>
-                            
+
+                            <p style="color: #f5a623; font-size: 0.85rem; margin-bottom: 0.5rem;">
+                                <?php echo e(str_repeat('★', round($product->rating))); ?><?php echo e(str_repeat('☆', 5 - round($product->rating))); ?>
+
+                                <span style="color: #999;">(<?php echo e($product->reviews_count); ?>)</span>
+                            </p>
+
                             <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem; height: 40px; overflow: hidden;">
                                 <?php echo e($product->short_description); ?>
 
                             </p>
-                            
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                <span style="font-size: 1.5rem; font-weight: 700; color: #000;">
-                                    $<?php echo e(number_format($product->price, 2)); ?>
 
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <span>
+                                    <?php if($product->hasDiscount()): ?>
+                                        <span style="display: block; text-decoration: line-through; color: #999; font-size: 0.9rem;">
+                                            $<?php echo e(number_format($product->price, 2)); ?>
+
+                                        </span>
+                                        <span style="font-size: 1.5rem; font-weight: 700; color: #dc3545;">
+                                            <?php echo e($product->getFormattedFinalPrice()); ?>
+
+                                        </span>
+                                    <?php else: ?>
+                                        <span style="font-size: 1.5rem; font-weight: 700; color: #000;">
+                                            $<?php echo e(number_format($product->price, 2)); ?>
+
+                                        </span>
+                                    <?php endif; ?>
                                 </span>
                                 <span style="background: <?php echo e($product->stock_status === 'out_of_stock' ? '#dc3545' : ($product->stock_status === 'low' ? '#ffc107' : '#28a745')); ?>; color: #fff; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem;">
                                     <?php echo e($product->stock_status === 'out_of_stock' ? 'Agotado' : ($product->stock_status === 'low' ? 'Pocas' : 'Disponible')); ?>

@@ -125,9 +125,9 @@
                                     {{ $item->product->name }}
                                 </a>
                             </td>
-                            <td style="text-align: center; padding: 1rem;">${{ number_format($item->price, 2) }}</td>
+                            <td style="text-align: center; padding: 1rem;">${{ number_format($item->unit_price, 2) }}</td>
                             <td style="text-align: center; padding: 1rem;">{{ $item->quantity }}</td>
-                            <td style="text-align: right; padding: 1rem; font-weight: 600;">${{ number_format($item->quantity * $item->price, 2) }}</td>
+                            <td style="text-align: right; padding: 1rem; font-weight: 600;">${{ number_format($item->subtotal, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -157,7 +157,7 @@
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e9ecef;">
                 <span>Envío:</span>
-                <strong>${{ number_format($order->shipping_cost, 2) }}</strong>
+                <strong>${{ number_format($order->shipping, 2) }}</strong>
             </div>
             
             @if($order->discount)

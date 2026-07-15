@@ -8,6 +8,7 @@ use App\Models\BankAccount;
 use App\Services\OrderService;
 use App\Services\CartService;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,7 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function checkout(): View
+    public function checkout(): View|RedirectResponse
     {
         $cart = $this->cartService->getCart();
         

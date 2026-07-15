@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\Wishlist;
 use App\Services\ProductService;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class CatalogController extends Controller
             'min_price' => $request->get('min_price'),
             'max_price' => $request->get('max_price'),
             'availability' => $request->get('availability'),
+            'on_sale' => $request->get('on_sale'),
             'search' => $request->get('search'),
             'sort' => $request->get('sort', 'newest'),
         ];
@@ -34,6 +36,7 @@ class CatalogController extends Controller
         $categories = Category::active()->orderBy('sort_order')->get();
         $brands = Brand::active()->orderBy('sort_order')->get();
         $priceRange = $this->productService->getPriceRange();
+        $wishlistedIds = $this->wishlistedIds();
 
         return view('client.catalog.index', [
             'products' => $products,
@@ -41,12 +44,13 @@ class CatalogController extends Controller
             'brands' => $brands,
             'priceRange' => $priceRange,
             'filters' => $filters,
+            'wishlistedIds' => $wishlistedIds,
         ]);
     }
 
     public function show(Request $request, $slug): View
     {
-        $product = Product::with(['category', 'brand', 'images', 'attributes'])
+        $product = Product::with(['category', 'brand', 'images', 'attributes', 'reviews'])
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -56,10 +60,25 @@ class CatalogController extends Controller
 
         $relatedProducts = $this->productService->getRelatedProducts($product->id, 4);
 
+        $userReview = auth()->check()
+            ? $product->reviews()->where('user_id', auth()->id())->first()
+            : null;
+
         return view('client.catalog.show', [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
+            'wishlistedIds' => $this->wishlistedIds(),
+            'userReview' => $userReview,
         ]);
+    }
+
+    protected function wishlistedIds(): array
+    {
+        if (!auth()->check()) {
+            return [];
+        }
+
+        return Wishlist::where('user_id', auth()->id())->pluck('product_id')->toArray();
     }
 
     public function quickSearch(Request $request)

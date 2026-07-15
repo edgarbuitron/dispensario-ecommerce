@@ -18,6 +18,7 @@ class Product extends Model
         'name',
         'slug',
         'price',
+        'discount_percentage',
         'cost_price',
         'description',
         'short_description',
@@ -69,6 +70,16 @@ class Product extends Model
         return $this->hasMany(ProductAttribute::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class)->latest();
+    }
+
+    public function wishlistedBy(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);
@@ -105,10 +116,34 @@ class Product extends Model
         return $query->where('type', $type);
     }
 
+    public function scopeOnSale($query)
+    {
+        return $query->where('discount_percentage', '>', 0);
+    }
+
     // Methods
     public function getPrimaryImage()
     {
         return $this->images()->where('is_primary', true)->first() ?? $this->images()->first();
+    }
+
+    public function hasDiscount(): bool
+    {
+        return $this->discount_percentage > 0;
+    }
+
+    public function getFinalPrice(): float
+    {
+        if (!$this->hasDiscount()) {
+            return (float) $this->price;
+        }
+
+        return round($this->price - ($this->price * $this->discount_percentage / 100), 2);
+    }
+
+    public function getFormattedFinalPrice(): string
+    {
+        return '$' . number_format($this->getFinalPrice(), 2);
     }
 
     public function isAvailable()

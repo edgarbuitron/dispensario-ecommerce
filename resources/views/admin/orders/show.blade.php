@@ -113,9 +113,9 @@
                         @foreach($order->items as $item)
                             <tr style="border-bottom: 1px solid #e9ecef;">
                                 <td style="padding: 1rem;">{{ $item->product->name }}</td>
-                                <td style="text-align: center; padding: 1rem;">${{ number_format($item->price, 2) }}</td>
+                                <td style="text-align: center; padding: 1rem;">${{ number_format($item->unit_price, 2) }}</td>
                                 <td style="text-align: center; padding: 1rem;">{{ $item->quantity }}</td>
-                                <td style="text-align: right; padding: 1rem; font-weight: 600;">${{ number_format($item->quantity * $item->price, 2) }}</td>
+                                <td style="text-align: right; padding: 1rem; font-weight: 600;">${{ number_format($item->subtotal, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -128,13 +128,12 @@
             <h2 style="font-weight: 700; margin-bottom: 1rem;">📍 Dirección de Envío</h2>
             
             <p style="font-weight: 600; margin-bottom: 0.5rem;">{{ $order->address->label }}</p>
-            <p style="color: #666; margin-bottom: 0.5rem;">{{ $order->address->street }} {{ $order->address->number }}</p>
-            <p style="color: #666; margin-bottom: 0.5rem;">{{ $order->address->city }}, {{ $order->address->state }} {{ $order->address->zip }}</p>
+            <p style="color: #666; margin-bottom: 0.5rem;">{{ $order->address->getFullAddress() }}</p>
             <p style="color: #666; margin-bottom: 0.5rem;">📞 {{ $order->address->phone }}</p>
-            
-            @if($order->address->notes)
+
+            @if($order->notes)
                 <p style="color: #666; font-size: 0.9rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e9ecef;">
-                    <strong>Notas:</strong> {{ $order->address->notes }}
+                    <strong>Notas del cliente:</strong> {{ $order->notes }}
                 </p>
             @endif
         </div>
@@ -153,7 +152,7 @@
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e9ecef; font-size: 0.9rem;">
                 <span>Envío:</span>
-                <strong>${{ number_format($order->shipping_cost, 2) }}</strong>
+                <strong>${{ number_format($order->shipping, 2) }}</strong>
             </div>
             
             @if($order->discount)
@@ -203,26 +202,28 @@
     </aside>
 </div>
 
-<!-- Modal Rechazo (oculto) -->
-<div id="reject-form" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;">
-    <div style="background: #fff; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%;">
-        <h3 style="font-weight: 700; margin-bottom: 1rem;">Rechazar Comprobante</h3>
-        
-        <form method="POST" action="{{ route('admin.proofs.reject', $order->proof->id) }}">
-            @csrf
-            
-            <textarea name="rejection_reason" required placeholder="¿Por qué se rechaza este comprobante?"
-                      style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 4px; min-height: 120px; margin-bottom: 1rem;"></textarea>
-            
-            <div style="display: flex; gap: 1rem;">
-                <button type="submit" class="btn btn-danger" style="flex: 1;">Confirmar rechazo</button>
-                <button type="button" class="btn btn-secondary" style="flex: 1;"
-                        onclick="document.getElementById('reject-form').style.display='none'">
-                    Cancelar
-                </button>
-            </div>
-        </form>
+@if($order->proof)
+    <!-- Modal Rechazo (oculto) -->
+    <div id="reject-form" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+        <div style="background: #fff; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%;">
+            <h3 style="font-weight: 700; margin-bottom: 1rem;">Rechazar Comprobante</h3>
+
+            <form method="POST" action="{{ route('admin.proofs.reject', $order->proof->id) }}">
+                @csrf
+
+                <textarea name="rejection_reason" required placeholder="¿Por qué se rechaza este comprobante?"
+                          style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 4px; min-height: 120px; margin-bottom: 1rem;"></textarea>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-danger" style="flex: 1;">Confirmar rechazo</button>
+                    <button type="button" class="btn btn-secondary" style="flex: 1;"
+                            onclick="document.getElementById('reject-form').style.display='none'">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+@endif
 
 @endsection

@@ -1,4 +1,4 @@
-﻿@extends("layouts.client")
+@extends("layouts.client")
 
 @section("title", "Política de Privacidad")
 

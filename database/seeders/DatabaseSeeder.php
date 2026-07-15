@@ -16,7 +16,13 @@ class DatabaseSeeder extends Seeder
         
         // Crear productos
         $this->call(ProductSeeder::class);
-        
+
+        // Crear imágenes de muestra para los productos
+        $this->call(ProductImageSeeder::class);
+
+        // Crear reseñas de clientes
+        $this->call(ReviewSeeder::class);
+
         // Crear usuarios clientes
         $this->call(UserSeeder::class);
         

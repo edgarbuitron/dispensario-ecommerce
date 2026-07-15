@@ -30,10 +30,10 @@
                                 <code style="background: #f8f9fa; padding: 0.5rem 1rem; border-radius: 4px;">{{ $coupon->code }}</code>
                             </td>
                             <td style="text-align: center; padding: 1rem; font-weight: 600;">
-                                {{ $coupon->discount_type === 'percentage' ? $coupon->discount_value . '%' : '$' . number_format($coupon->discount_value, 2) }}
+                                {{ $coupon->type === 'percentage' ? $coupon->discount_value . '%' : '$' . number_format($coupon->discount_value, 2) }}
                             </td>
-                            <td style="text-align: center; padding: 1rem;">{{ $coupon->usage_count }}/{{ $coupon->max_uses ?? '∞' }}</td>
-                            <td style="text-align: center; padding: 1rem;">{{ $coupon->end_date->format('d/m/Y') }}</td>
+                            <td style="text-align: center; padding: 1rem;">{{ $coupon->times_used }}/{{ $coupon->max_uses ?? '∞' }}</td>
+                            <td style="text-align: center; padding: 1rem;">{{ $coupon->valid_until?->format('d/m/Y') ?? 'Sin vencimiento' }}</td>
                             <td style="text-align: center; padding: 1rem;">
                                 <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; background: {{ $coupon->is_active ? '#d4edda' : '#f8d7da' }}; color: {{ $coupon->is_active ? '#155724' : '#721c24' }};">
                                     {{ $coupon->is_active ? '✓ Activo' : '✕ Inactivo' }}

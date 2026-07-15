@@ -1,4 +1,4 @@
-﻿@extends("layouts.admin")
+@extends("layouts.admin")
 
 @section("title", "Admin Dashboard")
 
@@ -20,6 +20,10 @@
                 <a href="/admin/orders" class="btn btn-success">Ver Órdenes</a>
                 <a href="/admin/proofs" class="btn btn-warning">Comprobantes</a>
                 <a href="/admin/categories" class="btn btn-info">Categorías</a>
+                <a href="/admin/brands" class="btn btn-outline-primary">Marcas</a>
+                <a href="/admin/coupons" class="btn btn-outline-success">Cupones</a>
+                <a href="/admin/banners" class="btn btn-outline-warning">Banners</a>
+                <a href="/admin/settings" class="btn btn-outline-secondary">Configuración</a>
             </div>
         </div>
     </div>

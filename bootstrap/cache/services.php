@@ -34,6 +34,7 @@
     30 => 'Termwind\\Laravel\\TermwindServiceProvider',
     31 => 'SocialiteProviders\\Manager\\ServiceProvider',
     32 => 'Spatie\\Permission\\PermissionServiceProvider',
+    33 => 'App\\Providers\\EventServiceProvider',
   ),
   'eager' => 
   array (
@@ -52,6 +53,7 @@
     12 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     13 => 'Termwind\\Laravel\\TermwindServiceProvider',
     14 => 'Spatie\\Permission\\PermissionServiceProvider',
+    15 => 'App\\Providers\\EventServiceProvider',
   ),
   'deferred' => 
   array (

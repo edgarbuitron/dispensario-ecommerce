@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Cart;
 use App\Models\Address;
+use App\Models\Coupon;
 use App\Events\OrderCreated;
 use Auth;
 
@@ -56,6 +57,11 @@ class OrderService
             'status' => 'pending_payment',
             'message' => 'Pedido realizado. Esperando comprobante de pago.',
         ]);
+
+        // Contabilizar el uso del cupón, si se aplicó uno
+        if ($cart->coupon_code) {
+            Coupon::where('code', $cart->coupon_code)->increment('times_used');
+        }
 
         // Limpiar carrito
         $cart->clear();

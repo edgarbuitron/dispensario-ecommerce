@@ -1,0 +1,127 @@
+<?php $product = $product ?? null; ?>
+
+<div class="row mb-3">
+    <div class="col-md-8">
+        <label class="form-label">Nombre del Producto</label>
+        <input type="text" name="name" class="form-control" value="<?php echo e(old('name', $product->name ?? '')); ?>" required>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Tipo</label>
+        <input type="text" name="type" class="form-control" placeholder="Vape, Flor, Aceite..." value="<?php echo e(old('type', $product->type ?? '')); ?>">
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label class="form-label">Categoría</label>
+        <select name="category_id" class="form-select" required>
+            <option value="">Selecciona una categoría</option>
+            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($category->id); ?>" <?php echo e(old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : ''); ?>>
+                    <?php echo e($category->name); ?>
+
+                </option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Marca</label>
+        <select name="brand_id" class="form-select">
+            <option value="">Sin marca</option>
+            <?php $__currentLoopData = $brands; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $brand): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($brand->id); ?>" <?php echo e(old('brand_id', $product->brand_id ?? '') == $brand->id ? 'selected' : ''); ?>>
+                    <?php echo e($brand->name); ?>
+
+                </option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Presentación</label>
+        <input type="text" name="presentation" class="form-control" placeholder="1g, 30ml, 10 piezas..." value="<?php echo e(old('presentation', $product->presentation ?? '')); ?>">
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <label class="form-label">Precio ($)</label>
+        <input type="number" step="0.01" min="0" name="price" class="form-control" value="<?php echo e(old('price', $product->price ?? '')); ?>" required>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Descuento (%)</label>
+        <input type="number" step="0.01" min="0" max="90" name="discount_percentage" class="form-control" placeholder="0"
+               value="<?php echo e(old('discount_percentage', $product->discount_percentage ?? '')); ?>">
+        <div class="form-text">Déjalo vacío si no tiene descuento.</div>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Costo ($)</label>
+        <input type="number" step="0.01" min="0" name="cost_price" class="form-control" placeholder="Automático (40% del precio)"
+               value="<?php echo e(old('cost_price', $product->cost_price ?? '')); ?>">
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Sabor</label>
+        <input type="text" name="flavor" class="form-control" value="<?php echo e(old('flavor', $product->flavor ?? '')); ?>">
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label class="form-label">Estado de Stock</label>
+        <select name="stock_status" class="form-select" required>
+            <?php $stock = old('stock_status', $product->stock_status ?? 'available'); ?>
+            <option value="available" <?php echo e($stock === 'available' ? 'selected' : ''); ?>>✅ Disponible</option>
+            <option value="low" <?php echo e($stock === 'low' ? 'selected' : ''); ?>>⚠️ Pocas unidades</option>
+            <option value="out_of_stock" <?php echo e($stock === 'out_of_stock' ? 'selected' : ''); ?>>❌ Agotado</option>
+            <option value="hidden" <?php echo e($stock === 'hidden' ? 'selected' : ''); ?>>🚫 Oculto (no visible)</option>
+        </select>
+    </div>
+    <div class="col-md-8 d-flex align-items-end gap-4">
+        <div class="form-check">
+            <input type="checkbox" name="is_featured" class="form-check-input" value="1" <?php echo e(old('is_featured', $product->is_featured ?? false) ? 'checked' : ''); ?>>
+            <label class="form-check-label">Destacado</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" name="is_new" class="form-check-input" value="1" <?php echo e(old('is_new', $product->is_new ?? false) ? 'checked' : ''); ?>>
+            <label class="form-check-label">Nuevo</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" name="is_active" class="form-check-input" value="1" <?php echo e(old('is_active', $product->is_active ?? true) ? 'checked' : ''); ?>>
+            <label class="form-check-label">Activo (visible en la tienda)</label>
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Descripción corta</label>
+    <input type="text" name="short_description" class="form-control" maxlength="255" value="<?php echo e(old('short_description', $product->short_description ?? '')); ?>">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Descripción</label>
+    <textarea name="description" class="form-control" rows="4"><?php echo e(old('description', $product->description ?? '')); ?></textarea>
+</div>
+
+<?php if($product && $product->images->count() > 0): ?>
+    <div class="mb-3">
+        <label class="form-label d-block">Imágenes actuales</label>
+        <div class="d-flex flex-wrap gap-3">
+            <?php $__currentLoopData = $product->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="text-center">
+                    <img src="<?php echo e(asset('storage/products/' . $image->image_path)); ?>"
+                         style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px; border: <?php echo e($image->is_primary ? '2px solid #198754' : '1px solid #ddd'); ?>;">
+                    <form method="POST" action="<?php echo e(route('admin.products.deleteImage', $image)); ?>" class="mt-1" onsubmit="return confirm('¿Eliminar esta imagen?')">
+                        <?php echo csrf_field(); ?>
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </form>
+                </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+<div class="mb-3">
+    <label class="form-label"><?php echo e($product ? 'Agregar más imágenes' : 'Imágenes'); ?></label>
+    <input type="file" name="images[]" class="form-control" accept="image/*" multiple>
+    <div class="form-text">Puedes seleccionar varias imágenes (JPG, PNG o WEBP, máx. 2MB cada una). La primera imagen se usa como principal.</div>
+</div>
+<?php /**PATH C:\Users\cesar\Videos\proyectos\proyectos\dispensario-ecommerce\resources\views/admin/products/_form.blade.php ENDPATH**/ ?>

@@ -33,7 +33,7 @@
     
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem;">
         @forelse($categories as $category)
-            <a href="{{ route('category.show', $category->slug) }}" 
+            <a href="{{ route('catalog.index', ['category' => $category->slug]) }}"
                style="text-decoration: none; color: inherit; transition: transform 0.3s;">
                 <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center; transition: all 0.3s; cursor: pointer; border: 1px solid #e9ecef;">
                     @if($category->image)

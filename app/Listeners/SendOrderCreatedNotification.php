@@ -15,7 +15,7 @@ class SendOrderCreatedNotification
             ->send(new OrderCreatedMail($event->order));
 
         // Enviar email al admin
-        Mail::to(config('app.support_email'))
+        Mail::to(\App\Models\Setting::get('support_email', 'admin@dispensario.com'))
             ->send(new \App\Mail\OrderCreatedAdminMail($event->order));
 
         // Crear notificación en base de datos

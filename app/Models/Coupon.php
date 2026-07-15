@@ -36,7 +36,7 @@ class Coupon extends Model
     {
         if (!$this->is_active) return false;
         if ($this->max_uses && $this->times_used >= $this->max_uses) return false;
-        if (now()->lt($this->valid_from) || (now()->gt($this->valid_until) && $this->valid_until)) return false;
+        if (now()->lt($this->valid_from) || ($this->valid_until && now()->gt($this->valid_until))) return false;
         return true;
     }
 
