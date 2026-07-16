@@ -13,105 +13,314 @@
     <title>@yield('title', config('app.name'))</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #000;
-            --secondary: #1a1a1a;
-            --accent: #ffffff;
-            --light: #f5f5f5;
+            /* Marca */
+            --color-black: #0a0a0a;
+            --color-ink: #17181a;
+            --color-accent: #2f5d3a;
+            --color-accent-dark: #21422a;
+            --color-accent-light: #e7f0e9;
+            --color-danger: #dc3545;
+            --color-warning: #b8860b;
+
+            /* Superficie / texto */
+            --color-bg: #ffffff;
+            --color-surface: #ffffff;
+            --color-surface-alt: #f7f7f5;
+            --color-text: #1a1a1a;
+            --color-text-muted: #6b6f76;
+            --color-border: #e7e7e4;
+
+            /* Tipografía */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+            /* Espaciado */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-12: 3rem;
+
+            /* Radios y sombras */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-full: 999px;
+            --shadow-sm: 0 1px 3px rgba(10, 10, 10, 0.06);
+            --shadow-md: 0 6px 20px rgba(10, 10, 10, 0.08);
+            --shadow-lg: 0 16px 40px rgba(10, 10, 10, 0.14);
+            --transition: 0.2s ease;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            background-color: #fff;
-            line-height: 1.6;
+
+        html {
+            scroll-behavior: smooth;
         }
-        
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            color: var(--color-black);
+        }
+
+        a {
+            color: var(--color-accent);
+            transition: color var(--transition);
+        }
+
+        a:hover {
+            color: var(--color-accent-dark);
+        }
+
+        p {
+            color: var(--color-text);
+        }
+
+        ::selection {
+            background: var(--color-accent-light);
+            color: var(--color-accent-dark);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+        }
+
+        /* Navbar */
         .navbar {
-            background: #000;
-            padding: 1rem 0;
+            background: var(--color-black);
+            padding: 0.85rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
         }
-        
+
         .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.35rem;
+            font-weight: 800;
             color: #fff;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
         }
-        
+
         .navbar a {
-            color: #fff;
+            color: rgba(255, 255, 255, 0.82);
             text-decoration: none;
-            margin: 0 1rem;
-            transition: opacity 0.3s;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color var(--transition);
         }
-        
+
         .navbar a:hover {
-            opacity: 0.7;
+            color: #fff;
         }
-        
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .navbar .cart-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--color-accent);
+            color: #fff !important;
+            padding: 0.45rem 0.85rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .navbar .cart-pill:hover {
+            background: var(--color-accent-dark);
+        }
+
+        #navSearchInput {
+            font-family: var(--font-sans);
+            border: 1px solid transparent;
+        }
+
+        #navSearchInput:focus-visible {
+            outline: 2px solid var(--color-accent);
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
         }
-        
+
         footer {
-            background: #000;
-            color: #fff;
-            padding: 2rem;
-            margin-top: 4rem;
+            background: var(--color-black);
+            color: rgba(255, 255, 255, 0.85);
+            padding: var(--space-12) 0 var(--space-6);
+            margin-top: var(--space-12);
         }
-        
+
+        footer h4 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: var(--space-4);
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        footer a:hover {
+            color: #fff !important;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.9rem;
+        }
+
+        /* Botones */
         .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
+            padding: 0.7rem 1.4rem;
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all var(--transition);
             text-decoration: none;
             display: inline-block;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 0.95rem;
         }
-        
+
         .btn-primary {
-            background: #000;
+            background: var(--color-accent);
             color: #fff;
         }
-        
+
         .btn-primary:hover {
-            background: #333;
+            background: var(--color-accent-dark);
+            color: #fff;
         }
-        
+
+        .btn-secondary {
+            background: #fff;
+            color: var(--color-text);
+            border-color: var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-surface-alt);
+            border-color: #d3d3ce;
+        }
+
+        .btn-danger {
+            background: var(--color-danger);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #b52a37;
+        }
+
+        .btn-outline-danger {
+            background: transparent;
+            color: var(--color-danger);
+            border-color: var(--color-danger);
+        }
+
+        .btn-outline-danger:hover {
+            background: var(--color-danger);
+            color: #fff;
+        }
+
+        /* Tarjetas y superficies */
+        .card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Insignias */
+        .badge-pill {
+            display: inline-block;
+            padding: 0.3rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .badge-success { background: var(--color-accent-light); color: var(--color-accent-dark); }
+        .badge-warning { background: #fdf1d9; color: #8a6116; }
+        .badge-danger { background: #fbe4e6; color: #a3212d; }
+        .badge-muted { background: var(--color-surface-alt); color: var(--color-text-muted); }
+
+        /* Alertas */
         .alert {
-            padding: 1rem;
+            padding: 1rem 1.25rem;
             margin: 1rem 0;
-            border-radius: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            font-size: 0.95rem;
         }
-        
+
         .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: var(--color-accent-light);
+            color: var(--color-accent-dark);
+            border-color: #cfe3d4;
         }
-        
+
         .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #fbe4e6;
+            color: #a3212d;
+            border-color: #f3c4c8;
         }
+
+        /* Formularios */
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"],
+        input[type="tel"], input[type="date"], input[type="url"], select, textarea {
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus,
+        input[type="number"]:focus, input[type="tel"]:focus, input[type="date"]:focus,
+        input[type="url"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--color-accent) !important;
+            box-shadow: 0 0 0 3px var(--color-accent-light);
+        }
+
+        /* Utilidades */
+        .text-muted { color: var(--color-text-muted); }
+        .text-accent { color: var(--color-accent); }
     </style>
-    
+
     @stack('css')
 </head>
 <body>
@@ -128,30 +337,30 @@
 
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
             <a href="{{ route('home') }}" class="navbar-brand">🌿 Dispensario</a>
 
-            <form method="GET" action="{{ route('catalog.index') }}" style="position: relative; flex: 1; max-width: 340px;">
+            <form method="GET" action="{{ route('catalog.index') }}" style="position: relative; flex: 1; min-width: 180px; max-width: 340px;">
                 <input type="text" id="navSearchInput" name="search" autocomplete="off" placeholder="Buscar productos..."
                        value="{{ request('search') }}"
-                       style="width: 100%; padding: 0.6rem 1rem; border-radius: 20px; border: none;">
+                       style="width: 100%; padding: 0.6rem 1rem; border-radius: var(--radius-full); border: none;">
                 <div id="navSearchResults"
-                     style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: #fff; color: #333; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); overflow: hidden; z-index: 50;"></div>
+                     style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: #fff; color: #333; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); overflow: hidden; z-index: 50;"></div>
             </form>
 
-            <div style="display: flex; gap: 2rem;">
+            <div class="nav-links">
                 <a href="{{ route('home') }}">Inicio</a>
                 <a href="{{ route('catalog.index') }}">Catálogo</a>
                 <!--<a href="{{ route('faq') }}">Preguntas</a>-->
                 <a href="{{ route('contact') }}">Contacto</a>
-                
+
                 @auth
                     <a href="{{ route('wishlist.index') }}">❤️ Favoritos</a>
                     <a href="{{ route('profile.index') }}">Perfil</a>
                     <a href="{{ route('orders.index') }}">Órdenes</a>
                     <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                         @csrf
-                        <button type="submit" style="background:none; border:none; color:#fff; cursor:pointer;">Salir</button>
+                        <button type="submit" style="background:none; border:none; color:rgba(255,255,255,0.82); cursor:pointer; font:inherit;">Salir</button>
                     </form>
                 @else
                     <a href="{{ route('login') }}">Iniciar Sesión</a>
@@ -163,7 +372,7 @@
                     <a href="{{ route('admin.login') }}">Admin</a>
                 @endauth
 
-                <a href="{{ route('cart.index') }}">🛒 <span id="cart-count">0</span></a>
+                <a href="{{ route('cart.index') }}" class="cart-pill">🛒 <span id="cart-count">0</span></a>
             </div>
         </div>
     </nav>
@@ -205,52 +414,55 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-8);">
                 <div>
-                    <h4>Sobre Nosotros</h4>
-                    <p>Dispensario Premium es tu tienda de confianza con los mejores productos y servicio.</p>
+                    <h4>🌿 Dispensario Premium</h4>
+                    <p>Tu tienda de confianza con los mejores productos y servicio.</p>
                 </div>
                 <div>
                     <h4>Enlaces</h4>
-                    <ul style="list-style: none;">
-                        <li><a href="{{ route('terms') }}" style="color: #fff;">Términos y Condiciones</a></li>
-                        <li><a href="{{ route('privacy') }}" style="color: #fff;">Política de Privacidad</a></li>
-                        <li><a href="{{ route('shipping') }}" style="color: #fff;">Envíos</a></li>
-                        <li><a href="{{ route('returns') }}" style="color: #fff;">Devoluciones</a></li>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+                        <li><a href="{{ route('terms') }}">Términos y Condiciones</a></li>
+                        <li><a href="{{ route('privacy') }}">Política de Privacidad</a></li>
+                        <li><a href="{{ route('shipping') }}">Envíos</a></li>
+                        <li><a href="{{ route('returns') }}">Devoluciones</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Contacto</h4>
-                    <p>Email: {{ config('app.support_email') }}</p>
+                    <p style="margin-bottom: 0.35rem;">Email: {{ config('app.support_email') }}</p>
                     <p>WhatsApp: {{ config('app.whatsapp') }}</p>
                 </div>
                 <div>
                     <h4>Síguenos</h4>
-                    <a href="#" style="color: #fff; margin-right: 1rem;">Instagram</a>
-                    <a href="#" style="color: #fff;">Facebook</a>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#">Instagram</a>
+                        <a href="#">Facebook</a>
+                    </div>
                 </div>
             </div>
-            
-            <hr style="margin: 2rem 0; border-color: #333;">
-            
+
+            <hr style="margin: var(--space-8) 0; border: none; border-top: 1px solid rgba(255,255,255,0.12);">
+
             <div style="text-align: center;">
-                <p>&copy; 2024 Dispensario Premium. Todos los derechos reservados.</p>
+                <p>&copy; {{ now()->year }} Dispensario Premium. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
     <!-- Modal Verificación de Edad -->
     @if (!auth()->check() && !session('age_verified'))
-        <div id="ageModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center;">
-            <div style="background: #fff; padding: 2rem; border-radius: 8px; max-width: 400px; text-align: center;">
-                <h2>⚠️ Verificación de Edad</h2>
-                <p style="margin: 1rem 0; color: #666;">Debes confirmar que tienes 18 años o más para acceder a este sitio.</p>
-                
+        <div id="ageModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,10,10,0.92); z-index: 2000; align-items: center; justify-content: center; padding: 1rem;">
+            <div class="card" style="padding: 2.5rem 2rem; max-width: 400px; text-align: center;">
+                <p style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌿</p>
+                <h2 style="margin-bottom: 0.5rem;">Verificación de Edad</h2>
+                <p style="margin: 0.5rem 0 1.5rem; color: var(--color-text-muted);">Debes confirmar que tienes 18 años o más para acceder a este sitio.</p>
+
                 <form method="POST" action="{{ route('age-gate.verify') }}">
                     @csrf
-                    <label style="display: flex; align-items: center; justify-content: center; margin: 1rem 0; cursor: pointer;">
+                    <label style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; cursor: pointer; font-size: 0.9rem;">
                         <input type="checkbox" name="age_verified" required>
-                        <span style="margin-left: 0.5rem;">Confirmo que tengo 18 años o más</span>
+                        <span>Confirmo que tengo 18 años o más</span>
                     </label>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Continuar</button>
                 </form>
@@ -338,7 +550,7 @@
                                     '<span style="flex:1;">' + esc(p.name) + '</span>' +
                                     '<strong>' + esc(p.price) + '</strong>' +
                                     '</a>';
-                            }).join('') + '<a href="{{ route("catalog.index") }}?search=' + encodeURIComponent(q) + '" style="display:block; text-align:center; padding:0.75rem; font-weight:600; text-decoration:none; color:#000; background:#f8f9fa;">Ver todos los resultados</a>';
+                            }).join('') + '<a href="{{ route("catalog.index") }}?search=' + encodeURIComponent(q) + '" style="display:block; text-align:center; padding:0.75rem; font-weight:600; text-decoration:none; color:#2f5d3a; background:#f7f7f5;">Ver todos los resultados</a>';
                             results.style.display = 'block';
                         });
                 }, 250);

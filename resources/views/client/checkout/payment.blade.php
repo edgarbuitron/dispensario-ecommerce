@@ -4,52 +4,52 @@
 
 @section('content')
 
-<div class="container" style="margin: 2rem auto; max-width: 800px;">
+<div class="container" style="margin: 2.5rem auto; max-width: 800px;">
 
-    <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 2rem; text-align: center; margin-bottom: 2rem;">
+    <div style="background: #fdf1d9; border: 1px solid #f2dfae; border-radius: var(--radius-lg); padding: 2rem; text-align: center; margin-bottom: 2rem;">
         <p style="font-size: 3rem; margin-bottom: 1rem;">⏳</p>
-        <h1 style="color: #856404; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;">Tu orden está pendiente de pago</h1>
-        <p style="color: #856404;">Orden <strong>{{ $order->order_number }}</strong> — Total: <strong>${{ number_format($order->total, 2) }}</strong></p>
+        <h1 style="color: #8a6116; font-size: 1.7rem; margin-bottom: 0.5rem;">Tu orden está pendiente de pago</h1>
+        <p style="color: #8a6116;">Orden <strong>{{ $order->order_number }}</strong> — Total: <strong>${{ number_format($order->total, 2) }}</strong></p>
     </div>
 
     <!-- Datos Bancarios -->
-    <div style="background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 2rem; margin-bottom: 2rem;">
-        <h2 style="font-weight: 700; margin-bottom: 1.5rem;">💳 Datos para tu transferencia</h2>
+    <div class="card" style="padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 1.5rem;">💳 Datos para tu transferencia</h2>
 
         @if($bankAccounts && $bankAccounts->count() > 0)
             @foreach($bankAccounts as $account)
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 4px; margin-bottom: 1rem;">
+                <div style="background: var(--color-surface-alt); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
                     <p style="font-weight: 700; margin-bottom: 0.5rem;">{{ $account->bank_name }}</p>
-                    <p style="color: #666; font-size: 0.95rem;">Titular: <strong>{{ $account->account_holder }}</strong></p>
+                    <p class="text-muted" style="font-size: 0.95rem;">Titular: <strong style="color: var(--color-text);">{{ $account->account_holder }}</strong></p>
                     @if($account->account_number)
-                        <p style="color: #666; font-size: 0.95rem;">Cuenta: <strong>{{ $account->account_number }}</strong></p>
+                        <p class="text-muted" style="font-size: 0.95rem;">Cuenta: <strong style="color: var(--color-text);">{{ $account->account_number }}</strong></p>
                     @endif
-                    <p style="color: #666; font-size: 0.95rem;">CLABE: <strong>{{ $account->clabe }}</strong></p>
+                    <p class="text-muted" style="font-size: 0.95rem;">CLABE: <strong style="color: var(--color-text);">{{ $account->clabe }}</strong></p>
                     @if($account->swift_code)
-                        <p style="color: #666; font-size: 0.95rem;">SWIFT: <strong>{{ $account->swift_code }}</strong></p>
+                        <p class="text-muted" style="font-size: 0.95rem;">SWIFT: <strong style="color: var(--color-text);">{{ $account->swift_code }}</strong></p>
                     @endif
                     @if($account->instructions)
-                        <p style="color: #666; font-size: 0.85rem; margin-top: 0.5rem;">{{ $account->instructions }}</p>
+                        <p class="text-muted" style="font-size: 0.85rem; margin-top: 0.5rem;">{{ $account->instructions }}</p>
                     @endif
                 </div>
             @endforeach
 
-            <div style="background: #f8f9fa; padding: 1rem; border-radius: 4px;">
-                <p style="font-weight: 600; margin-bottom: 0.5rem;">Concepto de pago:</p>
-                <p style="font-family: monospace; background: #fff; padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd;">
+            <div style="background: var(--color-surface-alt); padding: 1rem; border-radius: var(--radius-md);">
+                <p style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Concepto de pago:</p>
+                <p style="font-family: monospace; background: #fff; padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
                     Pago pedido {{ $order->order_number }}
                 </p>
             </div>
         @else
-            <p style="color: #666;">Aún no hay cuentas bancarias configuradas. Contáctanos para coordinar el pago.</p>
+            <p class="text-muted">Aún no hay cuentas bancarias configuradas. Contáctanos para coordinar el pago.</p>
         @endif
     </div>
 
     <!-- Siguiente Paso -->
-    <div style="background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px; padding: 1.5rem; margin-bottom: 2rem; text-align: center;">
-        <h3 style="color: #1565c0; font-weight: 700; margin-bottom: 1rem;">📤 Ya hiciste la transferencia?</h3>
-        <p style="color: #1565c0; margin-bottom: 1.5rem;">Sube tu comprobante para que podamos confirmar tu pago lo antes posible.</p>
-        <a href="{{ route('order.upload-proof.form', $order) }}" class="btn btn-primary" style="padding: 1rem 2rem;">
+    <div style="background: var(--color-accent-light); border-left: 4px solid var(--color-accent); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem; text-align: center;">
+        <h3 style="color: var(--color-accent-dark); font-size: 1.1rem; margin-bottom: 1rem;">📤 Ya hiciste la transferencia?</h3>
+        <p style="color: var(--color-accent-dark); margin-bottom: 1.5rem;">Sube tu comprobante para que podamos confirmar tu pago lo antes posible.</p>
+        <a href="{{ route('order.upload-proof.form', $order) }}" class="btn btn-primary" style="padding: 0.9rem 2rem;">
             Subir Comprobante de Pago
         </a>
     </div>

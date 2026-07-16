@@ -34,13 +34,18 @@ class AuditLog extends Model
     }
 
     // Methods
-    public static function log($adminUserId, $action, $modelType, $modelId, $changes = null)
+
+    /**
+     * Registra una acción de un admin sobre un modelo.
+     * Ej: AuditLog::log('delete', $product); AuditLog::log('update', $order, ['status' => 'shipped']);
+     */
+    public static function log(string $action, Model $model, ?array $changes = null): self
     {
         return self::create([
-            'admin_user_id' => $adminUserId,
+            'admin_user_id' => auth('admin')->id(),
             'action' => $action,
-            'model_type' => $modelType,
-            'model_id' => $modelId,
+            'model_type' => get_class($model),
+            'model_id' => $model->getKey(),
             'changes' => $changes,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),

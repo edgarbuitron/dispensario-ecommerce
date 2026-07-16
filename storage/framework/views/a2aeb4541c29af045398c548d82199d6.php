@@ -7,7 +7,7 @@
     <?php echo $__env->make('client.profile._sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <main>
-        <div style="background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 2rem; max-width: 500px;">
+        <div style="background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 2rem; max-width: 500px;">
             <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">✏️ Editar Perfil</h1>
 
             <form method="POST" action="<?php echo e(route('profile.update')); ?>">
@@ -16,12 +16,12 @@
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Nombre Completo</label>
                     <input type="text" name="name" value="<?php echo e(old('name', $user->name)); ?>" required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
                     <?php $__errorArgs = ['name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <div style="color: #dc3545; font-size: 0.85rem; margin-top: 0.25rem;"><?php echo e($message); ?></div> <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div style="color: var(--color-danger); font-size: 0.85rem; margin-top: 0.25rem;"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
@@ -30,12 +30,12 @@ unset($__errorArgs, $__bag); ?>
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Email</label>
                     <input type="email" name="email" value="<?php echo e(old('email', $user->email)); ?>" required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
                     <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <div style="color: #dc3545; font-size: 0.85rem; margin-top: 0.25rem;"><?php echo e($message); ?></div> <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div style="color: var(--color-danger); font-size: 0.85rem; margin-top: 0.25rem;"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
@@ -44,12 +44,12 @@ unset($__errorArgs, $__bag); ?>
                 <div style="margin-bottom: 2rem;">
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Teléfono</label>
                     <input type="text" name="phone" value="<?php echo e(old('phone', $user->phone)); ?>" required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
                     <?php $__errorArgs = ['phone'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <div style="color: #dc3545; font-size: 0.85rem; margin-top: 0.25rem;"><?php echo e($message); ?></div> <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div style="color: var(--color-danger); font-size: 0.85rem; margin-top: 0.25rem;"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>

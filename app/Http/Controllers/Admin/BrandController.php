@@ -91,10 +91,13 @@ class BrandController extends Controller
 
     public function destroy(Brand $brand)
     {
+        abort_unless(auth('admin')->user()->isSuperAdmin(), 403, 'Solo un super administrador puede eliminar marcas.');
+
         if ($brand->products()->count() > 0) {
             return back()->with('error', 'No se puede eliminar una marca que tiene productos');
         }
 
+        \App\Models\AuditLog::log('delete', $brand);
         $brand->delete();
 
         return redirect()->route('admin.brands.index')

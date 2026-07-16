@@ -17,16 +17,16 @@
         @if($addresses->count() > 0)
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
                 @foreach($addresses as $address)
-                    <div style="background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 1.5rem; {{ $address->is_default ? 'border: 2px solid #000;' : '' }}">
+                    <div style="background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 1.5rem; {{ $address->is_default ? 'border: 2px solid #000;' : '' }}">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                             <strong>{{ $address->label ?: 'Dirección' }}</strong>
                             @if($address->is_default)
                                 <span style="background: #000; color: #fff; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem;">Predeterminada</span>
                             @endif
                         </div>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.25rem;">{{ $address->recipient_name }}</p>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.25rem;">{{ $address->getFullAddress() }}</p>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">📞 {{ $address->phone }}</p>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">{{ $address->recipient_name }}</p>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">{{ $address->getFullAddress() }}</p>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1rem;">📞 {{ $address->phone }}</p>
 
                         <div style="display: flex; gap: 0.5rem;">
                             <a href="{{ route('profile.addresses.edit', $address) }}" class="btn btn-secondary" style="flex: 1; text-align: center; padding: 0.5rem;">✏️ Editar</a>
@@ -39,8 +39,8 @@
                 @endforeach
             </div>
         @else
-            <div style="text-align: center; padding: 4rem 2rem; background: #f8f9fa; border-radius: 8px;">
-                <p style="color: #666; margin-bottom: 1.5rem;">No tienes direcciones guardadas todavía</p>
+            <div style="text-align: center; padding: 4rem 2rem; background: var(--color-surface-alt); border-radius: var(--radius-lg);">
+                <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">No tienes direcciones guardadas todavía</p>
                 <a href="{{ route('profile.addresses.create') }}" class="btn btn-primary">Agregar mi primera dirección</a>
             </div>
         @endif

@@ -72,6 +72,8 @@ class OrderController extends Controller
 
         $this->orderService->approveProof($proof->id, $validated['notes'] ?? null);
 
+        \App\Models\AuditLog::log('approve_proof', $order, ['notes' => $validated['notes'] ?? null]);
+
         return redirect()->route('admin.orders.show', $order)
             ->with('success', 'Comprobante aprobado');
     }
@@ -94,6 +96,8 @@ class OrderController extends Controller
 
         $this->orderService->rejectProof($proof->id, $validated['notes']);
 
+        \App\Models\AuditLog::log('reject_proof', $order, ['notes' => $validated['notes']]);
+
         return redirect()->route('admin.orders.show', $order)
             ->with('success', 'Comprobante rechazado');
     }
@@ -110,6 +114,8 @@ class OrderController extends Controller
             $validated['status'],
             $validated['notes'] ?? null
         );
+
+        \App\Models\AuditLog::log('update_status', $order, ['status' => $validated['status']]);
 
         return redirect()->route('admin.orders.show', $order)
             ->with('success', 'Estado de la orden actualizado');

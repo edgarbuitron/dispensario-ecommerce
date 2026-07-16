@@ -50,15 +50,18 @@
                             [$label, $color] = $stockLabels[$product->stock_status] ?? ['-', 'secondary'];
                         ?>
                         <span class="badge bg-<?php echo e($color); ?>"><?php echo e($label); ?></span>
+                        <span class="text-muted small">(<?php echo e($product->stock_quantity); ?>)</span>
                     </td>
                     <td><?php echo e($product->is_active ? 'Sí' : 'No'); ?></td>
                     <td class="d-flex gap-2">
                         <a href="<?php echo e(route('admin.products.edit', $product)); ?>" class="btn btn-sm btn-primary">Editar</a>
-                        <form method="POST" action="<?php echo e(route('admin.products.destroy', $product)); ?>" onsubmit="return confirm('¿Eliminar este producto?')">
-                            <?php echo csrf_field(); ?>
-                            <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
-                        </form>
+                        <?php if(auth('admin')->user()->isSuperAdmin()): ?>
+                            <form method="POST" action="<?php echo e(route('admin.products.destroy', $product)); ?>" onsubmit="return confirm('¿Eliminar este producto?')">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            </form>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

@@ -27,7 +27,7 @@ class OrderPagesTest extends TestCase
             'name' => 'Flor Gelato',
             'slug' => 'flor-gelato',
             'price' => 58,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-ORD-001',
             'is_active' => true,
         ]);

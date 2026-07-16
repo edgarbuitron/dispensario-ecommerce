@@ -12,11 +12,11 @@
         <?php $orders = $user->orders()->latest()->get(); ?>
 
         <?php if($orders->count() > 0): ?>
-            <div style="background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden;">
+            <div style="background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden;">
                 <div style="overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse;">
                         <thead>
-                            <tr style="background: #f8f9fa; border-bottom: 2px solid #e9ecef;">
+                            <tr style="background: var(--color-surface-alt); border-bottom: 2px solid var(--color-border);">
                                 <th style="text-align: left; padding: 1rem; font-weight: 600;">Orden</th>
                                 <th style="text-align: left; padding: 1rem; font-weight: 600;">Fecha</th>
                                 <th style="text-align: center; padding: 1rem; font-weight: 600;">Estado</th>
@@ -26,11 +26,11 @@
                         </thead>
                         <tbody>
                             <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr style="border-bottom: 1px solid #e9ecef;">
+                                <tr style="border-bottom: 1px solid var(--color-border);">
                                     <td style="padding: 1rem; font-family: monospace;"><?php echo e($order->order_number); ?></td>
                                     <td style="padding: 1rem;"><?php echo e($order->created_at->format('d/m/Y')); ?></td>
                                     <td style="text-align: center; padding: 1rem;">
-                                        <span style="background: #f8f9fa; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem;"><?php echo e($order->getStatusLabel()); ?></span>
+                                        <span style="background: var(--color-surface-alt); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem;"><?php echo e($order->getStatusLabel()); ?></span>
                                     </td>
                                     <td style="text-align: right; padding: 1rem; font-weight: 600;">$<?php echo e(number_format($order->total, 2)); ?></td>
                                     <td style="text-align: center; padding: 1rem;">
@@ -43,8 +43,8 @@
                 </div>
             </div>
         <?php else: ?>
-            <div style="text-align: center; padding: 4rem 2rem; background: #f8f9fa; border-radius: 8px;">
-                <p style="color: #666; margin-bottom: 1.5rem;">Todavía no tienes órdenes registradas</p>
+            <div style="text-align: center; padding: 4rem 2rem; background: var(--color-surface-alt); border-radius: var(--radius-lg);">
+                <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Todavía no tienes órdenes registradas</p>
                 <a href="<?php echo e(route('catalog.index')); ?>" class="btn btn-primary">Explorar Catálogo</a>
             </div>
         <?php endif; ?>

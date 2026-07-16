@@ -9,7 +9,7 @@
     @include('client.profile._sidebar')
 
     <main>
-        <div style="background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 2rem; max-width: 500px;">
+        <div style="background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 2rem; max-width: 500px;">
             <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">✏️ Editar Perfil</h1>
 
             <form method="POST" action="{{ route('profile.update') }}">
@@ -18,22 +18,22 @@
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Nombre Completo</label>
                     <input type="text" name="name" value="{{ old('name', $user->name) }}" required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
-                    @error('name') <div style="color: #dc3545; font-size: 0.85rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+                    @error('name') <div style="color: var(--color-danger); font-size: 0.85rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                 </div>
 
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Email</label>
                     <input type="email" name="email" value="{{ old('email', $user->email) }}" required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
-                    @error('email') <div style="color: #dc3545; font-size: 0.85rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+                    @error('email') <div style="color: var(--color-danger); font-size: 0.85rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                 </div>
 
                 <div style="margin-bottom: 2rem;">
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Teléfono</label>
                     <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
-                    @error('phone') <div style="color: #dc3545; font-size: 0.85rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+                    @error('phone') <div style="color: var(--color-danger); font-size: 0.85rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem;">Guardar Cambios</button>

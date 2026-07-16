@@ -41,10 +41,12 @@
                             </td>
                             <td style="text-align: center; padding: 1rem;">
                                 <a href="<?php echo e(route('admin.coupons.edit', $coupon->id)); ?>" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">✏️</a>
-                                <form method="POST" action="<?php echo e(route('admin.coupons.destroy', $coupon->id)); ?>" onsubmit="return confirm('¿Eliminar?');" style="display: inline;">
-                                    <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                                    <button type="submit" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.85rem;">🗑️</button>
-                                </form>
+                                <?php if(auth('admin')->user()->isSuperAdmin()): ?>
+                                    <form method="POST" action="<?php echo e(route('admin.coupons.destroy', $coupon->id)); ?>" onsubmit="return confirm('¿Eliminar?');" style="display: inline;">
+                                        <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
+                                        <button type="submit" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.85rem;">🗑️</button>
+                                    </form>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

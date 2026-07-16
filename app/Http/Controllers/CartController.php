@@ -26,10 +26,24 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $product = Product::findOrFail($request->get('product_id'));
-        $quantity = $request->get('quantity', 1);
+        $quantity = max(1, (int) $request->get('quantity', 1));
 
         if ($product->isOutOfStock()) {
-            return response()->json(['success' => false, 'message' => 'Producto agotado'], 400);
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Producto agotado'], 400);
+            }
+
+            return back()->with('error', 'Este producto está agotado');
+        }
+
+        if ($quantity > $product->stock_quantity) {
+            $quantity = max(1, $product->stock_quantity);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => "Solo quedan {$product->stock_quantity} unidades disponibles"], 400);
+            }
+
+            return back()->with('error', "Solo quedan {$product->stock_quantity} unidades disponibles");
         }
 
         $this->cartService->addProduct($product, $quantity);

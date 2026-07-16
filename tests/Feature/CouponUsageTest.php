@@ -27,7 +27,7 @@ class CouponUsageTest extends TestCase
             'name' => 'Flor Gelato',
             'slug' => 'flor-gelato',
             'price' => 100,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-CPN-001',
             'is_active' => true,
         ]);

@@ -8,8 +8,8 @@
     <?php if($products->count() > 0): ?>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem;">
             <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div style="background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #e9ecef;">
-                    <div style="position: relative; width: 100%; height: 220px; background: #f8f9fa;">
+                <div style="background: #fff; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+                    <div style="position: relative; width: 100%; height: 220px; background: var(--color-surface-alt);">
                         <?php if($product->getPrimaryImage()): ?>
                             <img src="<?php echo e(asset('storage/products/' . $product->getPrimaryImage()->image_path)); ?>"
                                  style="width: 100%; height: 100%; object-fit: cover;" alt="<?php echo e($product->name); ?>">
@@ -35,14 +35,14 @@
                         </h3>
 
                         <?php if($product->brand): ?>
-                            <p style="color: #999; font-size: 0.85rem; margin-bottom: 1rem;"><?php echo e($product->brand->name); ?></p>
+                            <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 1rem;"><?php echo e($product->brand->name); ?></p>
                         <?php endif; ?>
 
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                             <?php if($product->hasDiscount()): ?>
                                 <span>
-                                    <span style="text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 0.5rem;">$<?php echo e(number_format($product->price, 2)); ?></span>
-                                    <strong style="font-size: 1.3rem; color: #dc3545;"><?php echo e($product->getFormattedFinalPrice()); ?></strong>
+                                    <span style="text-decoration: line-through; color: var(--color-text-muted); font-size: 0.85rem; margin-right: 0.5rem;">$<?php echo e(number_format($product->price, 2)); ?></span>
+                                    <strong style="font-size: 1.3rem; color: var(--color-danger);"><?php echo e($product->getFormattedFinalPrice()); ?></strong>
                                 </span>
                             <?php else: ?>
                                 <strong style="font-size: 1.3rem;">$<?php echo e(number_format($product->price, 2)); ?></strong>
@@ -65,8 +65,8 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
     <?php else: ?>
-        <div style="text-align: center; padding: 4rem 2rem; background: #f8f9fa; border-radius: 8px;">
-            <p style="font-size: 1.1rem; color: #666; margin-bottom: 1rem;">Todavía no tienes productos favoritos</p>
+        <div style="text-align: center; padding: 4rem 2rem; background: var(--color-surface-alt); border-radius: var(--radius-lg);">
+            <p style="font-size: 1.1rem; color: var(--color-text-muted); margin-bottom: 1rem;">Todavía no tienes productos favoritos</p>
             <a href="<?php echo e(route('catalog.index')); ?>" class="btn btn-primary">Explorar Catálogo</a>
         </div>
     <?php endif; ?>

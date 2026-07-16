@@ -66,6 +66,12 @@
 
 <div class="row mb-3">
     <div class="col-md-4">
+        <label class="form-label">Cantidad en Stock</label>
+        <input type="number" name="stock_quantity" class="form-control" min="0" step="1"
+               value="<?php echo e(old('stock_quantity', $product->stock_quantity ?? 0)); ?>">
+        <div class="form-text">El estado (Disponible/Pocas/Agotado) se calcula solo según esta cantidad.</div>
+    </div>
+    <div class="col-md-4">
         <label class="form-label">Estado de Stock</label>
         <select name="stock_status" class="form-select" required>
             <?php $stock = old('stock_status', $product->stock_status ?? 'available'); ?>
@@ -74,8 +80,9 @@
             <option value="out_of_stock" <?php echo e($stock === 'out_of_stock' ? 'selected' : ''); ?>>❌ Agotado</option>
             <option value="hidden" <?php echo e($stock === 'hidden' ? 'selected' : ''); ?>>🚫 Oculto (no visible)</option>
         </select>
+        <div class="form-text">Usa "Oculto" para retirarlo de la tienda sin borrarlo.</div>
     </div>
-    <div class="col-md-8 d-flex align-items-end gap-4">
+    <div class="col-md-4 d-flex align-items-end gap-4">
         <div class="form-check">
             <input type="checkbox" name="is_featured" class="form-check-input" value="1" <?php echo e(old('is_featured', $product->is_featured ?? false) ? 'checked' : ''); ?>>
             <label class="form-check-label">Destacado</label>

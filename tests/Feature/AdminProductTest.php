@@ -52,7 +52,7 @@ class AdminProductTest extends TestCase
             'category_id' => $category->id,
             'price' => 50,
             'discount_percentage' => 15,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'is_active' => '1',
             'images' => [$this->fakePng()],
         ]);
@@ -74,7 +74,7 @@ class AdminProductTest extends TestCase
             'name' => 'Producto Existente',
             'slug' => 'producto-existente',
             'price' => 30,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-ADM-001',
             'is_active' => true,
         ]);
@@ -100,7 +100,7 @@ class AdminProductTest extends TestCase
             'name' => 'Producto a Borrar',
             'slug' => 'producto-a-borrar',
             'price' => 30,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-ADM-002',
             'is_active' => true,
         ]);

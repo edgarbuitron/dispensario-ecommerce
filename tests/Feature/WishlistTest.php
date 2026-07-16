@@ -22,7 +22,7 @@ class WishlistTest extends TestCase
             'name' => 'Flor Gelato',
             'slug' => 'flor-gelato',
             'price' => 40,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-WISH-001',
             'is_active' => true,
         ]);

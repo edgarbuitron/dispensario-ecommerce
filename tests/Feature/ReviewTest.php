@@ -21,7 +21,7 @@ class ReviewTest extends TestCase
             'name' => 'Flor Gelato',
             'slug' => 'flor-gelato',
             'price' => 40,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-REV-001',
             'is_active' => true,
             'rating' => 0,

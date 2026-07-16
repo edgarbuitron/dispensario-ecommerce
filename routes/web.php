@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Rutas pÃºblicas
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 Route::get('/about', [\App\Http\Controllers\HomeController::class, 'about'])->name('about');
 Route::get('/contact', [\App\Http\Controllers\HomeController::class, 'contact'])->name('contact');
 Route::post('/contact', [\App\Http\Controllers\HomeController::class, 'sendContact'])->name('contact.send');
@@ -90,13 +91,24 @@ require __DIR__.'/auth.php';
 Route::prefix('admin')->name('admin.')->group(function () {
     // Login
     Route::get('/login', [\App\Http\Controllers\Admin\AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [\App\Http\Controllers\Admin\AuthController::class, 'login'])->name('login.submit');
+    Route::post('/login', [\App\Http\Controllers\Admin\AuthController::class, 'login'])
+        ->middleware('throttle:5,1')->name('login.submit');
+
+    // Verificación en dos pasos (segundo paso del login, todavía sin sesión de admin)
+    Route::get('/two-factor-challenge', [\App\Http\Controllers\Admin\TwoFactorChallengeController::class, 'show'])->name('two-factor.show');
+    Route::post('/two-factor-challenge', [\App\Http\Controllers\Admin\TwoFactorChallengeController::class, 'verify'])
+        ->middleware('throttle:5,1')->name('two-factor.verify');
 
     // Rutas protegidas
     Route::middleware(['auth:admin'])->group(function () {
 
         // Dashboard
         Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+        // Seguridad / 2FA (disponible para cualquier admin sobre su propia cuenta)
+        Route::get('security', [\App\Http\Controllers\Admin\TwoFactorSettingsController::class, 'show'])->name('security.index');
+        Route::post('security/enable', [\App\Http\Controllers\Admin\TwoFactorSettingsController::class, 'enable'])->name('security.enable');
+        Route::post('security/disable', [\App\Http\Controllers\Admin\TwoFactorSettingsController::class, 'disable'])->name('security.disable');
 
         // Productos
         Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)
@@ -139,6 +151,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('settings/bank-accounts', [\App\Http\Controllers\Admin\SettingController::class, 'addBankAccount'])->name('settings.bankAccounts.add');
         Route::post('settings/bank-accounts/{bankAccount}', [\App\Http\Controllers\Admin\SettingController::class, 'updateBankAccount'])->name('settings.bankAccounts.update');
         Route::post('settings/bank-accounts/{bankAccount}/delete', [\App\Http\Controllers\Admin\SettingController::class, 'deleteBankAccount'])->name('settings.bankAccounts.delete');
+
+        // Auditoría
+        Route::get('audit-logs', [\App\Http\Controllers\Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
     });
 });
 

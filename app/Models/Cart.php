@@ -19,6 +19,7 @@ class Cart extends Model
         'total',
         'coupon_code',
         'discount',
+        'reminder_sent_at',
     ];
 
     protected $casts = [
@@ -26,6 +27,7 @@ class Cart extends Model
         'tax' => 'decimal:2',
         'total' => 'decimal:2',
         'discount' => 'decimal:2',
+        'reminder_sent_at' => 'datetime',
     ];
 
     // Relationships
@@ -67,6 +69,7 @@ class Cart extends Model
         $this->update([
             'subtotal' => $subtotal,
             'total' => $subtotal + ($this->tax ?? 0) - ($this->discount ?? 0),
+            'reminder_sent_at' => null,
         ]);
     }
 

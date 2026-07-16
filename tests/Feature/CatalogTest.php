@@ -31,7 +31,7 @@ class CatalogTest extends TestCase
             'slug' => 'flor-gelato-35g',
             'price' => 35.00,
             'discount_percentage' => null,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-TEST-001',
             'is_active' => true,
             'rating' => 4.5,
@@ -59,7 +59,7 @@ class CatalogTest extends TestCase
             'name' => 'Aceite CBD',
             'slug' => 'aceite-cbd',
             'price' => 50,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-TEST-002',
             'is_active' => true,
         ]);

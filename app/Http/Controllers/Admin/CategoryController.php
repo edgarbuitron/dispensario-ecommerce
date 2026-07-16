@@ -89,10 +89,13 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        abort_unless(auth('admin')->user()->isSuperAdmin(), 403, 'Solo un super administrador puede eliminar categorías.');
+
         if ($category->products()->count() > 0) {
             return back()->with('error', 'No se puede eliminar una categoría que tiene productos');
         }
 
+        \App\Models\AuditLog::log('delete', $category);
         $category->delete();
 
         return redirect()->route('admin.categories.index')

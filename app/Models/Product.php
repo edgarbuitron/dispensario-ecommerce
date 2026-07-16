@@ -26,6 +26,7 @@ class Product extends Model
         'flavor',
         'presentation',
         'stock_status',
+        'stock_quantity',
         'sku',
         'quantity_sold',
         'rating',
@@ -47,6 +48,21 @@ class Product extends Model
             'featured_until' => 'datetime',
             'new_until' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        // La cantidad numérica es la fuente de verdad para el estado de stock,
+        // salvo que el admin lo haya ocultado manualmente ("hidden").
+        static::saving(function (Product $product) {
+            if ($product->isDirty('stock_quantity') && $product->stock_status !== 'hidden') {
+                $product->stock_status = match (true) {
+                    $product->stock_quantity <= 0 => 'out_of_stock',
+                    $product->stock_quantity <= 5 => 'low',
+                    default => 'available',
+                };
+            }
+        });
     }
 
     // Relationships
@@ -159,6 +175,16 @@ class Product extends Model
     public function hasLowStock()
     {
         return $this->stock_status === 'low';
+    }
+
+    public function decrementStock(int $quantity): void
+    {
+        $this->update(['stock_quantity' => max(0, $this->stock_quantity - $quantity)]);
+    }
+
+    public function incrementStock(int $quantity): void
+    {
+        $this->update(['stock_quantity' => $this->stock_quantity + $quantity]);
     }
 
     public function getFormattedPrice()

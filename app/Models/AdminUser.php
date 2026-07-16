@@ -23,11 +23,14 @@ class AdminUser extends Authenticatable
         'is_active',
         'last_login_at',
         'last_login_ip',
+        'two_factor_secret',
+        'two_factor_confirmed_at',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
     ];
 
     protected function casts(): array
@@ -35,6 +38,8 @@ class AdminUser extends Authenticatable
         return [
             'password' => 'hashed',
             'last_login_at' => 'datetime',
+            'two_factor_confirmed_at' => 'datetime',
+            'two_factor_secret' => 'encrypted',
         ];
     }
 
@@ -74,6 +79,11 @@ class AdminUser extends Authenticatable
     public function canDeleteProducts()
     {
         return $this->isSuperAdmin();
+    }
+
+    public function hasTwoFactorEnabled(): bool
+    {
+        return !is_null($this->two_factor_secret) && !is_null($this->two_factor_confirmed_at);
     }
 
     public function updateLastLogin($ip)

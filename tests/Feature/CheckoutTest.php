@@ -27,7 +27,7 @@ class CheckoutTest extends TestCase
             'name' => 'Flor Gelato',
             'slug' => 'flor-gelato',
             'price' => 40,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-CHK-001',
             'is_active' => true,
         ]);
@@ -81,7 +81,7 @@ class CheckoutTest extends TestCase
             'name' => 'Flor Gelato',
             'slug' => 'flor-gelato-2',
             'price' => 40,
-            'stock_status' => 'available',
+            'stock_status' => 'available', 'stock_quantity' => 20,
             'sku' => 'SKU-CHK-002',
             'is_active' => true,
         ]);

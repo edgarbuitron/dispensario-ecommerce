@@ -87,6 +87,9 @@ class CouponController extends Controller
 
     public function destroy(Coupon $coupon)
     {
+        abort_unless(auth('admin')->user()->isSuperAdmin(), 403, 'Solo un super administrador puede eliminar cupones.');
+
+        \App\Models\AuditLog::log('delete', $coupon);
         $coupon->delete();
 
         return redirect()->route('admin.coupons.index')

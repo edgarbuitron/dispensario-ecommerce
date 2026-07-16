@@ -95,6 +95,9 @@ class BannerController extends Controller
 
     public function destroy(Banner $banner)
     {
+        abort_unless(auth('admin')->user()->isSuperAdmin(), 403, 'Solo un super administrador puede eliminar banners.');
+
+        \App\Models\AuditLog::log('delete', $banner);
         $banner->delete();
 
         return redirect()->route('admin.banners.index')

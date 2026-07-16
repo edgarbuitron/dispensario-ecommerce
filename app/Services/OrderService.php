@@ -38,7 +38,7 @@ class OrderService
             'notes' => $data['notes'] ?? null,
         ]);
 
-        // Copiar items del carrito a la orden
+        // Copiar items del carrito a la orden y descontar inventario
         foreach ($cart->items as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -50,6 +50,8 @@ class OrderService
                 'subtotal' => $item->subtotal,
                 'product_attributes' => json_encode($item->product->attributes->pluck('attribute_value', 'attribute_name')),
             ]);
+
+            $item->product->decrementStock($item->quantity);
         }
 
         // Registrar primer estado
@@ -87,11 +89,20 @@ class OrderService
     public function updateOrderStatus($orderId, $status, $notes = null)
     {
         $order = Order::findOrFail($orderId);
-        
+        $wasAlreadyCancelled = $order->status === 'cancelled';
+
         $order->update([
             'status' => $status,
             'admin_notes' => $notes ?? $order->admin_notes,
         ]);
+
+        // Al cancelar, devolver el inventario reservado.
+        if ($status === 'cancelled' && !$wasAlreadyCancelled) {
+            $order->load('items.product');
+            foreach ($order->items as $item) {
+                $item->product?->incrementStock($item->quantity);
+            }
+        }
 
         $order->tracking()->create([
             'status' => $status,

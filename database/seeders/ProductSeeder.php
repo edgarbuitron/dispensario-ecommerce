@@ -181,9 +181,15 @@ class ProductSeeder extends Seeder
                 $brand = $brands->isNotEmpty() ? $brands[$index % $brands->count()] : null;
 
                 // Distribución de stock para poder probar el filtro de disponibilidad.
+                // La cantidad es la fuente de verdad: el estado se deriva de ella al guardar.
+                $stockQuantity = match (true) {
+                    $index % 9 === 0 => 0,
+                    $index % 5 === 0 => 2 + ($index % 4),
+                    default => 15 + (($index * 7) % 40),
+                };
                 $stockStatus = match (true) {
-                    $index % 9 === 0 => 'out_of_stock',
-                    $index % 5 === 0 => 'low',
+                    $stockQuantity <= 0 => 'out_of_stock',
+                    $stockQuantity <= 5 => 'low',
                     default => 'available',
                 };
 
@@ -214,6 +220,7 @@ class ProductSeeder extends Seeder
                         'flavor' => $flavor,
                         'presentation' => $presentation,
                         'stock_status' => $stockStatus,
+                        'stock_quantity' => $stockQuantity,
                         'sku' => 'SKU-' . strtoupper($categorySlug) . '-' . str_pad($index + 1, 3, '0', STR_PAD_LEFT),
                         'is_featured' => $index < 2,
                         'is_new' => $index >= count($data['items']) - 3,

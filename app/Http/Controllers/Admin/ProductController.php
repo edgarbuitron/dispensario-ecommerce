@@ -40,6 +40,8 @@ class ProductController extends Controller
 
         $this->storeImages($request, $product);
 
+        \App\Models\AuditLog::log('create', $product);
+
         return redirect()->route('admin.products.index')->with('success', '✅ Producto creado correctamente');
     }
 
@@ -63,12 +65,18 @@ class ProductController extends Controller
 
         $this->storeImages($request, $product);
 
+        \App\Models\AuditLog::log('update', $product, ['stock_quantity' => $product->stock_quantity]);
+
         return redirect()->route('admin.products.index')->with('success', '✅ Producto actualizado!');
     }
 
     public function destroy(Product $product)
     {
+        abort_unless(auth('admin')->user()->isSuperAdmin(), 403, 'Solo un super administrador puede eliminar productos.');
+
         $product->delete();
+
+        \App\Models\AuditLog::log('delete', $product);
 
         return redirect()->route('admin.products.index')->with('success', '🗑️ Producto eliminado correctamente');
     }
@@ -105,6 +113,7 @@ class ProductController extends Controller
             'flavor' => 'nullable|string|max:255',
             'presentation' => 'nullable|string|max:255',
             'stock_status' => 'required|in:available,low,out_of_stock,hidden',
+            'stock_quantity' => 'nullable|integer|min:0',
             'description' => 'nullable|string',
             'short_description' => 'nullable|string|max:255',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',

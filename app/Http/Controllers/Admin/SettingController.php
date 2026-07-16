@@ -13,6 +13,10 @@ class SettingController extends Controller
     public function __construct()
     {
         $this->middleware('auth:admin');
+        $this->middleware(function ($request, $next) {
+            abort_unless(auth('admin')->user()->isSuperAdmin(), 403, 'Solo un super administrador puede acceder a la configuración.');
+            return $next($request);
+        });
     }
 
     public function index(): View
@@ -52,6 +56,16 @@ class SettingController extends Controller
             Setting::set($key, $value, $group);
         }
 
+        \App\Models\AuditLog::create([
+            'admin_user_id' => auth('admin')->id(),
+            'action' => 'update',
+            'model_type' => Setting::class,
+            'model_id' => 0,
+            'changes' => ['keys' => array_keys($validated)],
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
+
         return redirect()->route('admin.settings.index')
             ->with('success', 'Configuración actualizada correctamente');
     }
@@ -74,7 +88,9 @@ class SettingController extends Controller
             'instructions' => 'nullable|string',
         ]);
 
-        BankAccount::create($validated);
+        $bankAccount = BankAccount::create($validated);
+
+        \App\Models\AuditLog::log('create', $bankAccount, ['bank_name' => $bankAccount->bank_name]);
 
         return redirect()->route('admin.settings.bank-accounts')
             ->with('success', 'Cuenta bancaria agregada correctamente');
@@ -96,12 +112,15 @@ class SettingController extends Controller
 
         $bankAccount->update($validated);
 
+        \App\Models\AuditLog::log('update', $bankAccount, ['bank_name' => $bankAccount->bank_name]);
+
         return redirect()->route('admin.settings.bank-accounts')
             ->with('success', 'Cuenta bancaria actualizada correctamente');
     }
 
     public function deleteBankAccount(BankAccount $bankAccount)
     {
+        \App\Models\AuditLog::log('delete', $bankAccount, ['bank_name' => $bankAccount->bank_name]);
         $bankAccount->delete();
 
         return redirect()->route('admin.settings.bank-accounts')

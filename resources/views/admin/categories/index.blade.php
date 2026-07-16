@@ -29,10 +29,12 @@
                             <td style="text-align: center; padding: 1rem;">{{ $cat->products_count ?? 0 }}</td>
                             <td style="text-align: center; padding: 1rem;">
                                 <a href="{{ route('admin.categories.edit', $cat->id) }}" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">✏️</a>
-                                <form method="POST" action="{{ route('admin.categories.destroy', $cat->id) }}" onsubmit="return confirm('¿Eliminar?');" style="display: inline;">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.85rem;">🗑️</button>
-                                </form>
+                                @if(auth('admin')->user()->isSuperAdmin())
+                                    <form method="POST" action="{{ route('admin.categories.destroy', $cat->id) }}" onsubmit="return confirm('¿Eliminar?');" style="display: inline;">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.85rem;">🗑️</button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

@@ -52,15 +52,18 @@
                             [$label, $color] = $stockLabels[$product->stock_status] ?? ['-', 'secondary'];
                         @endphp
                         <span class="badge bg-{{ $color }}">{{ $label }}</span>
+                        <span class="text-muted small">({{ $product->stock_quantity }})</span>
                     </td>
                     <td>{{ $product->is_active ? 'Sí' : 'No' }}</td>
                     <td class="d-flex gap-2">
                         <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-primary">Editar</a>
-                        <form method="POST" action="{{ route('admin.products.destroy', $product) }}" onsubmit="return confirm('¿Eliminar este producto?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
-                        </form>
+                        @if(auth('admin')->user()->isSuperAdmin())
+                            <form method="POST" action="{{ route('admin.products.destroy', $product) }}" onsubmit="return confirm('¿Eliminar este producto?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            </form>
+                        @endif
                     </td>
                 </tr>
             @empty
