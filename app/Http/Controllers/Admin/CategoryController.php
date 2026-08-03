@@ -51,7 +51,9 @@ class CategoryController extends Controller
             $validated['image'] = $filename;
         }
 
-        Category::create($validated);
+        $category = Category::create($validated);
+
+        \App\Models\AuditLog::log('create', $category);
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Categoría creada correctamente');
@@ -82,6 +84,8 @@ class CategoryController extends Controller
         }
 
         $category->update($validated);
+
+        \App\Models\AuditLog::log('update', $category);
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Categoría actualizada correctamente');

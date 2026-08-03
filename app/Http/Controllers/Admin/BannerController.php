@@ -54,7 +54,9 @@ class BannerController extends Controller
             $validated['image'] = $filename;
         }
 
-        Banner::create($validated);
+        $banner = Banner::create($validated);
+
+        \App\Models\AuditLog::log('create', $banner);
 
         return redirect()->route('admin.banners.index')
             ->with('success', 'Banner creado correctamente');
@@ -88,6 +90,8 @@ class BannerController extends Controller
         }
 
         $banner->update($validated);
+
+        \App\Models\AuditLog::log('update', $banner);
 
         return redirect()->route('admin.banners.index')
             ->with('success', 'Banner actualizado correctamente');

@@ -154,20 +154,6 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header"><h5 class="mb-0">Acciones Rápidas</h5></div>
-    <div class="card-body d-flex flex-wrap gap-2">
-        <a href="/admin/products" class="btn btn-primary">Gestionar Productos</a>
-        <a href="/admin/orders" class="btn btn-success">Ver Órdenes</a>
-        <a href="/admin/proofs" class="btn btn-warning">Comprobantes</a>
-        <a href="/admin/categories" class="btn btn-info">Categorías</a>
-        <a href="/admin/brands" class="btn btn-outline-primary">Marcas</a>
-        <a href="/admin/coupons" class="btn btn-outline-success">Cupones</a>
-        <a href="/admin/banners" class="btn btn-outline-warning">Banners</a>
-        <a href="/admin/settings" class="btn btn-outline-secondary">Configuración</a>
-    </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script>
     new Chart(document.getElementById('salesChart'), {

@@ -52,7 +52,9 @@ class BrandController extends Controller
             $validated['logo'] = $filename;
         }
 
-        Brand::create($validated);
+        $brand = Brand::create($validated);
+
+        \App\Models\AuditLog::log('create', $brand);
 
         return redirect()->route('admin.brands.index')
             ->with('success', 'Marca creada correctamente');
@@ -84,6 +86,8 @@ class BrandController extends Controller
         }
 
         $brand->update($validated);
+
+        \App\Models\AuditLog::log('update', $brand);
 
         return redirect()->route('admin.brands.index')
             ->with('success', 'Marca actualizada correctamente');

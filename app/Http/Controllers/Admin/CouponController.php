@@ -50,7 +50,9 @@ class CouponController extends Controller
         $validated['is_active'] = $request->has('is_active');
         $validated['code'] = strtoupper($validated['code']);
 
-        Coupon::create($validated);
+        $coupon = Coupon::create($validated);
+
+        \App\Models\AuditLog::log('create', $coupon);
 
         return redirect()->route('admin.coupons.index')
             ->with('success', 'Cupón creado correctamente');
@@ -80,6 +82,8 @@ class CouponController extends Controller
         $validated['code'] = strtoupper($validated['code']);
 
         $coupon->update($validated);
+
+        \App\Models\AuditLog::log('update', $coupon);
 
         return redirect()->route('admin.coupons.index')
             ->with('success', 'Cupón actualizado correctamente');

@@ -107,7 +107,6 @@
                 <a href="{{ route('admin.banners.index') }}" class="nav-link">🖼️ Banners</a>
                 @if(auth('admin')->check() && auth('admin')->user()->isSuperAdmin())
                     <a href="{{ route('admin.settings.index') }}" class="nav-link">⚙️ Configuración</a>
-                    <a href="{{ route('admin.audit-logs.index') }}" class="nav-link">🕵️ Auditoría</a>
                 @endif
             </div>
         </div>
