@@ -1,12 +1,12 @@
 # Dispensario Premium E-commerce
 
 ## Descripción
-E-commerce profesional para dispensario desarrollado con Laravel 12, PHP 8.3 y MySQL 8. Sistema completo con panel administrativo, gestión de órdenes, usuarios y pagos.
+E-commerce profesional para dispensario desarrollado con Laravel 12 y PHP 8.3. Usa SQLite para desarrollo local y puede configurarse con MySQL 8 para otros entornos.
 
 ## Requisitos
 - PHP 8.3 o superior
-- Composer
-- MySQL 8 o superior
+- Composer 2
+- SQLite (incluido con PHP mediante `pdo_sqlite`) para desarrollo local; MySQL 8 es opcional
 - Node.js y NPM (para assets)
 - Git
 
@@ -33,7 +33,10 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-### 5. Configurar base de datos en .env
+### 5. Configurar la base de datos
+La plantilla `.env.example` usa SQLite y el archivo `database/database.sqlite` incluido. No necesitas instalar MySQL para ejecutar el proyecto localmente.
+
+Para usar MySQL en cambio, configura `.env` así:
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -43,7 +46,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-### 6. Crear base de datos
+### 6. Crear la base de datos MySQL (solo si elegiste MySQL)
 ```bash
 mysql -u root -p -e "CREATE DATABASE dispensario_ecommerce;"
 ```

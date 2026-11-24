@@ -151,6 +151,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('settings/bank-accounts', [\App\Http\Controllers\Admin\SettingController::class, 'addBankAccount'])->name('settings.bankAccounts.add');
         Route::post('settings/bank-accounts/{bankAccount}', [\App\Http\Controllers\Admin\SettingController::class, 'updateBankAccount'])->name('settings.bankAccounts.update');
         Route::post('settings/bank-accounts/{bankAccount}/delete', [\App\Http\Controllers\Admin\SettingController::class, 'deleteBankAccount'])->name('settings.bankAccounts.delete');
+
+        // Auditoría (solo super administradores)
+        Route::get('audit-logs', [\App\Http\Controllers\Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
     });
 });
 

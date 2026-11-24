@@ -4,11 +4,11 @@
 
 ### Requisitos Previos
 ```bash
-php 8.3
-mysql 8
-composer
-node.js
+PHP 8.3+
+Composer 2
+Node.js y npm
 ```
+SQLite está incluido con PHP para desarrollo local; MySQL 8 es opcional.
 
 ### Paso 1: Descargar e Instalar Dependencias
 ```bash
@@ -32,19 +32,20 @@ php artisan key:generate
 ```
 
 ### Paso 3: Base de Datos
-```bash
-# En MySQL, crear database
-CREATE DATABASE dispensario_ecommerce;
+La configuración predeterminada usa el archivo SQLite incluido (`database/database.sqlite`), así que no hace falta instalar MySQL para ejecutar el proyecto.
 
-# O desde terminal
-mysql -u root -p -e "CREATE DATABASE dispensario_ecommerce;"
-
-# En .env, configurar:
+Para usar MySQL, configura `.env`:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
 DB_DATABASE=dispensario_ecommerce
 DB_USERNAME=root
 DB_PASSWORD=(tu contraseña)
+```
 
-# Migrar y seedear
+Después, migra y carga los datos de demostración:
+```bash
 php artisan migrate
 php artisan db:seed
 ```
@@ -206,17 +207,11 @@ APP_NAME="Dispensario Premium"
 APP_ENV=local
 APP_KEY=base64:...
 APP_DEBUG=true
-APP_URL=http://localhost
+APP_URL=http://localhost:8000
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_DATABASE=dispensario_ecommerce
-DB_USERNAME=root
-DB_PASSWORD=
+DB_CONNECTION=sqlite
 
 MAIL_MAILER=log
-MAIL_HOST=mailhog
-MAIL_PORT=1025
 MAIL_FROM_ADDRESS=noreply@dispensario.com
 
 GOOGLE_CLIENT_ID=
